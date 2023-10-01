@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaBiz</title>
+    <!-- Include Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Include particles.js CDN -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+
+<body class="bg-blue-900 text-white font-inter">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-800 shadow-lg py-6"> <!-- Increased padding for more spacing -->
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="text-3xl font-bold">
+                    MetaBiz
+                </div>
+                <div class="flex space-x-20">
+                    <a href="#market-insights" class="text-white hover:text-gray-400">Market Insights</a>
+                    <a href="#enterprise-trends" class="text-white hover:text-gray-400">Enterprise Trends</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <div class="max-w-6xl mx-auto mt-20 px-4 text-center">
+        <h1 class="text-5xl font-bold mb-4">Uncover the Future of Business and Finance</h1>
+        <p class="text-xl mb-10">MetaBiz offers curated insights and trends from the dynamic world of business and finance. Stay informed, stay ahead. Explore the latest market dynamics, investment strategies, and business innovations.</p>
+    </div>
+
+    <!-- Content Sections -->
+    <div class="max-w-6xl mx-auto mt-20 px-4">
+
+        <!-- Stocks Section -->
+        <section id="market-insights" class="mb-20">
+            <h2 class="text-4xl font-bold mb-4">Market Insights</h2>
+            <p class="text-lg mb-4">Get the latest updates on stock markets, commodities, and other financial instruments...</p>
+            <div class="flex items-center mb-10">
+                <input id="stocksSearchInput" type="text" placeholder="Search Market News..." class="p-2 flex-grow rounded-l border-2 border-white focus:border-blue-500 focus:outline-none text-black">
+                <button onclick="searchMetaphor('stocks')" id="stocksSearchButton" class="p-2 rounded-r border-2 border-white focus:border-blue-500 focus:outline-none bg-blue-700">🔍</button>
+            </div>
+            <div id="stocksContainer" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Placeholder for stock articles -->
+            </div>          
+        </section>
+
+        <!-- Business Section -->
+        <section id="enterprise-trends" class="mb-20">
+            <h2 class="text-4xl font-bold mb-4">Enterprise Trends</h2>
+            <p class="text-lg mb-4">From emerging startups to established corporations, explore the latest trends, innovations, and strategies driving the business world. Stay updated with industry news, mergers, acquisitions, and more.</p>
+            <div class="flex items-center mb-10">
+                <input id="businessSearchInput" type="text" placeholder="Search Business Trends..." class="p-2 flex-grow rounded-l border-2 border-white focus:border-blue-500 focus:outline-none text-black">
+                <button onclick="searchMetaphor('business')" id="businessSearchButton" class="p-2 rounded-r border-2 border-white focus:border-blue-500 focus:outline-none bg-blue-700">🔍</button>
+            </div>
+            <div id="businessContainer" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Placeholder for business articles -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Particles.js container -->
+    <div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: {
+                    type: "circle",
+                    stroke: { width: 0, color: "#000000" },
+                    polygon: { nb_sides: 5 },
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: { enable: false, speed: 40, size_min: 0.1, sync: false }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                },
+                modes: {
+                    grab: { distance: 400, line_linked: { opacity: 1 } },
+                    bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 },
+                    repulse: { distance: 200, duration: 0.4 },
+                    push: { particles_nb: 4 },
+                    remove: { particles_nb: 2 }
+                }
+            },
+            retina_detect: true
+        });
+        
+        function searchMetaphor(section) {
+            let searchTerm;
+            if (section === 'stocks') {
+                searchTerm = document.getElementById('stocksSearchInput').value || "hottest tech stocks right now";
+            } else if (section === 'business') {
+                searchTerm = document.getElementById('businessSearchInput').value || "latest business trends";
+            }
+    
+            fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ search: searchTerm })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const stocksContainer = document.getElementById('stocksContainer');
+                const businessContainer = document.getElementById('businessContainer');
+    
+                // Clear existing articles
+                stocksContainer.innerHTML = '';
+                businessContainer.innerHTML = '';
+    
+                if (section === 'stocks') {
+                    // Populate the stocks section
+                    data.forEach(article => {
+                        const articleDiv = createArticleDiv(article);
+                        stocksContainer.appendChild(articleDiv);
+                    });
+                } else if (section === 'business') {
+                    // Populate the business section
+                    data.forEach(article => {
+                        const articleDiv = createArticleDiv(article);
+                        businessContainer.appendChild(articleDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    
+        function createArticleDiv(article) {
+            const articleDiv = document.createElement('div');
+            articleDiv.className = 'bg-blue-800 p-4 rounded shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center';
+            const articleLink = document.createElement('a');
+            articleLink.href = article.url;
+            articleLink.target = '_blank';
+            articleLink.className = 'text-white hover:text-gray-100 font-bold';
+            articleLink.innerText = article.title;
+            articleDiv.appendChild(articleLink);
+            return articleDiv;
+        }        
+
+    </script>
+
+</body>
+
+</html>
